@@ -1,0 +1,43 @@
+services:
+  api:
+    build: .
+    container_name: workout_api
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      PYTHONPATH: /app/backend
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./backend:/app/backend
+      - /app/backend/.venv
+
+    depends_on:
+      - postgres
+
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  postgres:
+    image: postgres:16
+    container_name: workout_postgres
+    restart: unless-stopped
+
+    environment:
+      ENV: DEV
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: workout_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
