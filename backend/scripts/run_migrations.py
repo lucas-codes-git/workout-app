@@ -1,3 +1,4 @@
+import asyncio
 from pathlib import Path
 
 from app.db import pool
@@ -6,10 +7,10 @@ from app.db import pool
 MIGRATIONS_DIR = Path(__file__).resolve().parent.parent / "migrations"
 
 
-def create_migrations_table():
-    with pool.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(
+async def create_migrations_table():
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(
                 """
                 CREATE TABLE IF NOT EXISTS schema_migrations (
                     id SERIAL PRIMARY KEY,
@@ -20,10 +21,10 @@ def create_migrations_table():
             )
 
 
-def get_applied_migrations():
-    with pool.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(
+async def get_applied_migrations():
+    async with pool.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute(
                 """
                 SELECT migration_name
                 FROM schema_migrations
@@ -31,17 +32,18 @@ def get_applied_migrations():
                 """
             )
 
-            return {row[0] for row in cur.fetchall()}
+            return {row[0] for row in await cur.fetchall()}
 
 
-def run_migrations():
-    create_migrations_table()
+async def run_migrations():
+    await create_migrations_table()
 
-    applied_migrations = get_applied_migrations()
+    applied_migrations = await get_applied_migrations()
 
     migration_files = sorted(MIGRATIONS_DIR.glob("*.sql"))
 
     for migration_file in migration_files:
+
         if migration_file.name in applied_migrations:
             print(f"Skipping {migration_file.name}")
             continue
@@ -50,11 +52,11 @@ def run_migrations():
 
         sql = migration_file.read_text()
 
-        with pool.connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(sql)
+        async with pool.connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(sql)
 
-                cur.execute(
+                await cur.execute(
                     """
                     INSERT INTO schema_migrations (migration_name)
                     VALUES (%s);
@@ -66,7 +68,13 @@ def run_migrations():
 
 
 if __name__ == "__main__":
-    try:
-        run_migrations()
-    finally:
-        pool.close()
+
+    async def main():
+        await pool.open()
+
+        try:
+            await run_migrations()
+        finally:
+            await pool.close()
+
+    asyncio.run(main())

@@ -1,4 +1,5 @@
 from app.db.models.workouts import Workouts
+from app.schemas.workout import WorkoutUpdate
 from app.db import pool
 from uuid import UUID
 
@@ -59,7 +60,7 @@ class WorkoutService:
                 
         return Workouts(*row)
     
-    async def update_workout(self, workout_id: UUID, workout: Workouts) -> Workouts | None:
+    async def update_workout(self, workout_id: UUID, workout: WorkoutUpdate) -> Workouts | None:
         async with pool.connection() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
@@ -82,7 +83,7 @@ class WorkoutService:
     
     async def delete_workout(self, workout_id: UUID) -> Workouts | None:
         async with pool.connection() as conn:
-            async with conn.cursor as cur:
+            async with conn.cursor() as cur:
                 await cur.execute(
                     """
                     DELETE FROM workouts
