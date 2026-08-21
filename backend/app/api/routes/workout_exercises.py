@@ -51,7 +51,7 @@ async def update_workout_exercise_order(workout_id: UUID, exercise_id: UUID, wor
     
     return workout_exercise
 
-@router.delete("/{workout_id}/exercises/{exercisse_id}", response_model=WorkoutExerciseResponse)
+@router.delete("/{workout_id}/exercises/{exercise_id}", response_model=WorkoutExerciseResponse)
 async def delete_workout_exercise(workout_id: UUID, exercise_id: UUID):
     workout_exercise =  await service.delete_workout_exercise(workout_id=workout_id, exercise_id=exercise_id)
     

@@ -1,0 +1,9 @@
+{
+  "name": "Form / Log",
+  "short_name": "Form / Log",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2efe7",
+  "theme_color": "#17251f",
+  "description": "A deliberate workout log for the gym."
+}

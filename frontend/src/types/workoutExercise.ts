@@ -1,0 +1,1 @@
+export type WorkoutExercise = { id: string; workout_id: string; exercise_id: string; exercise_order: number; created_at: string; updated_at: string };
