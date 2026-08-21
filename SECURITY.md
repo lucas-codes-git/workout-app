@@ -1,7 +1,7 @@
 # Security Notes
 
-This project is designed to be safe to publish as a public portfolio repository. The source code and documentation are public; the running workout data and credentials remain private on the owner's machine.
-
+This project is designed to be safe to publish as a public portfoliner's machine.
+o repository. The source code and documentation are public; the running workout data and credentials remain private on the ow
 ## Repository
 
 The GitHub repository may be public. Never commit `.env`, database dumps, tokens, passwords, private keys, or real credentials. The committed `.env.example` contains placeholders only and is safe to show publicly.
