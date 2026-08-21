@@ -16,10 +16,10 @@ async def get_exercises() -> list[ExerciseResponse]:
 async def create_exercise(exercise: ExerciseCreate):
     return await exercise_service.create_exercise(exercise=exercise)
 
-@router.put("/{id}")
+@router.put("/{exercise_id}")
 async def update_exercise(exercise_id: UUID, exercise_updates: ExerciseUpdate):
     return await exercise_service.update_exercise(exercise_id=exercise_id, exercise=exercise_updates)
 
-@router.delete("/{id}")
+@router.delete("/{exercise_id}")
 async def delete_exercise(exercise_id: UUID):
     return await exercise_service.delete_exercise(exercise_id=exercise_id)

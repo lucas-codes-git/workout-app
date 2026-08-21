@@ -1,5 +1,5 @@
 from app.db.models.exercises import Exercises
-from app.schemas.exercises import ExerciseCreate, ExerciseResponse, ExerciseUpdate
+from app.schemas.exercises import ExerciseUpdate, ExerciseCreate
 from app.db import pool
 from uuid import UUID
 
@@ -25,7 +25,7 @@ class ExerciseService:
                 
         return [Exercises(*row) for row in rows]
     
-    async def create_exercise(self, exercise: Exercises) -> Exercises:
+    async def create_exercise(self, exercise: ExerciseCreate) -> Exercises:
         async with pool.connection() as conn:
             async with conn.cursor() as cur:
                 await cur.execute(
